@@ -60,6 +60,7 @@ site
 Bender.lock
 Bender.local
 deps
+bender
 
 # Auto generated sources
 generated
