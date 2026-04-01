@@ -57,67 +57,67 @@ jobs: $(TRAFFIC_GEN)
 clean-jobs:
 	rm -rf $(TRAFFIC_OUTDIR)
 
-# Set the job name and directory if specified
-ifdef JOB_NAME
-VSIM_FLAGS += +JOB_NAME=$(JOB_NAME)
-endif
-ifdef TRAFFIC_INJ_RATIO
-VSIM_FLAGS += +TRAFFIC_INJ_RATIO=$(TRAFFIC_INJ_RATIO)
-endif
-ifdef JOB_DIR
-VSIM_FLAGS += +JOB_DIR=$(JOB_DIR)
-endif
-ifdef LOG_FILE
-VSIM_FLAGS += -l $(LOG_FILE)
-VSIM_FLAGS += -nostdout
-endif
+# # Set the job name and directory if specified
+# ifdef JOB_NAME
+# VSIM_FLAGS += +JOB_NAME=$(JOB_NAME)
+# endif
+# ifdef TRAFFIC_INJ_RATIO
+# VSIM_FLAGS += +TRAFFIC_INJ_RATIO=$(TRAFFIC_INJ_RATIO)
+# endif
+# ifdef JOB_DIR
+# VSIM_FLAGS += +JOB_DIR=$(JOB_DIR)
+# endif
+# ifdef LOG_FILE
+# VSIM_FLAGS += -l $(LOG_FILE)
+# VSIM_FLAGS += -nostdout
+# endif
 
-########################
-# QuestaSim Simulation #
-########################
+# ########################
+# # QuestaSim Simulation #
+# ########################
 
-VLOG_ARGS += -suppress vlog-2583
-VLOG_ARGS += -suppress vlog-13314
-VLOG_ARGS += -suppress vlog-13233
-VLOG_ARGS += -timescale \"1 ns / 1 ps\"
-VLOG_ARGS += -work $(WORK)
+# VLOG_ARGS += -suppress vlog-2583
+# VLOG_ARGS += -suppress vlog-13314
+# VLOG_ARGS += -suppress vlog-13233
+# VLOG_ARGS += -timescale \"1 ns / 1 ps\"
+# VLOG_ARGS += -work $(WORK)
 
-VSIM_FLAGS += -64
-VSIM_FLAGS += -t 1ps
-VSIM_FLAGS += -sv_seed 0
-VSIM_FLAGS += -quiet
-VSIM_FLAGS += -work $(WORK)
+# VSIM_FLAGS += -64
+# VSIM_FLAGS += -t 1ps
+# VSIM_FLAGS += -sv_seed 0
+# VSIM_FLAGS += -quiet
+# VSIM_FLAGS += -work $(WORK)
 
 
-# Automatically open the waveform if a wave.tcl file is present
-VSIM_FLAGS_GUI += -do "log -r /*"
-VSIM_FLAGS_GUI += -voptargs=+acc
-ifneq ("$(wildcard hw/tb/wave/$(TB_DUT).wave.tcl)","")
-    VSIM_FLAGS_GUI += -do "source hw/tb/wave/$(TB_DUT).wave.tcl"
-endif
+# # Automatically open the waveform if a wave.tcl file is present
+# VSIM_FLAGS_GUI += -do "log -r /*"
+# VSIM_FLAGS_GUI += -voptargs=+acc
+# ifneq ("$(wildcard hw/tb/wave/$(TB_DUT).wave.tcl)","")
+#     VSIM_FLAGS_GUI += -do "source hw/tb/wave/$(TB_DUT).wave.tcl"
+# endif
 
-.PHONY: compile-vsim run-vsim run-vsim-batch clean-vsim
+# .PHONY: compile-vsim run-vsim run-vsim-batch clean-vsim
 
-scripts/compile_vsim.tcl: Bender.yml
-	mkdir -p scripts
-	echo 'set ROOT [file normalize [file dirname [info script]]/..]' > scripts/compile_vsim.tcl
-	$(BENDER) script vsim --vlog-arg="$(VLOG_ARGS)" $(BENDER_FLAGS) | grep -v "set ROOT" >> scripts/compile_vsim.tcl
-	echo >> scripts/compile_vsim.tcl
+# scripts/compile_vsim.tcl: Bender.yml
+# 	mkdir -p scripts
+# 	echo 'set ROOT [file normalize [file dirname [info script]]/..]' > scripts/compile_vsim.tcl
+# 	$(BENDER) script vsim --vlog-arg="$(VLOG_ARGS)" $(BENDER_FLAGS) | grep -v "set ROOT" >> scripts/compile_vsim.tcl
+# 	echo >> scripts/compile_vsim.tcl
 
-compile-vsim: scripts/compile_vsim.tcl
-	$(VSIM) -64 -c -do "source scripts/compile_vsim.tcl; quit"
+# compile-vsim: scripts/compile_vsim.tcl
+# 	$(VSIM) -64 -c -do "source scripts/compile_vsim.tcl; quit"
 
-run-vsim:
-	$(VSIM) $(VSIM_FLAGS) $(VSIM_FLAGS_GUI) $(TB_DUT)
+# run-vsim:
+# 	$(VSIM) $(VSIM_FLAGS) $(VSIM_FLAGS_GUI) $(TB_DUT)
 
-run-vsim-batch:
-	$(VSIM) -c $(VSIM_FLAGS) $(TB_DUT) -do "run -all; quit"
+# run-vsim-batch:
+# 	$(VSIM) -c $(VSIM_FLAGS) $(TB_DUT) -do "run -all; quit"
 
-clean-vsim:
-	rm -rf scripts/compile_vsim.tcl
-	rm -rf modelsim.ini
-	rm -rf transcript
-	rm -rf work*
+# clean-vsim:
+# 	rm -rf scripts/compile_vsim.tcl
+# 	rm -rf modelsim.ini
+# 	rm -rf transcript
+# 	rm -rf work*
 
 ##################
 # VCS Simulation #
