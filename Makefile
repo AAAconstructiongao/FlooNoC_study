@@ -18,7 +18,7 @@ FLOO_ROOT ?= $(shell pwd)
 QUESTA_SEPP ?=
 VCS_SEPP    ?=
 
-BENDER     	?= bender
+BENDER     	?= /root/rtl_src/study_noc/FlooNoC_study/bender
 VSIM       	?= $(QUESTA_SEPP) vsim
 SPYGLASS   	?= sg_shell
 VERIBLE_FMT	?= verible-verilog-format
