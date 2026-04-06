@@ -61,7 +61,7 @@ module floo_router
   /// Only used for `XYRouting`, tie to '0 otherwise
   input  id_t                                        xy_id_i,
   /// Only used for `IdTable` routing, tie to '0 otherwise
-  input  addr_rule_t [NumAddrRules-1:0]              id_route_map_i,
+  input  addr_rule_t [NumAddrRules-1:0]              id_route_map_i, //floo_route_select 会用这张表按规则匹配，决定 flit 应该走哪个输出方向
   /// Input channels
   input  logic  [NumInput-1:0][NumVirtChannels-1:0]  valid_i,
   output logic  [NumInput-1:0][NumVirtChannels-1:0]  ready_o,

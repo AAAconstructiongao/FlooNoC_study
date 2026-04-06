@@ -1,0 +1,53 @@
+name: axi_mesh
+description: "AXI mesh with XY routing"
+network_type: "axi"
+
+# 1. Routing Configuration
+routing:
+  route_algo: "XY"
+  use_id_table: true
+
+# 2. Protocol Definitions
+protocols:
+  - name: "axi_in"
+    protocol: "AXI4"
+    data_width: 64
+    addr_width: 48
+    id_width: 4
+    user_width: 1
+  - name: "axi_out"
+    protocol: "AXI4"
+    data_width: 64
+    addr_width: 48
+    id_width: 2
+    user_width: 1
+
+# 3. Endpoint Definitions
+endpoints:
+  - name: "cluster"
+    array: [4, 4]
+    addr_range:
+      base: 0x0000_0000_0000
+      size: 0x0000_0001_0000
+    mgr_port_protocol:
+      - "axi_in"
+    sbr_port_protocol:
+      - "axi_out"
+
+# 4. Router Definitions
+routers:
+  - name: "router"
+    array: [4, 4]
+    degree: 5
+
+# 5. Connectivity
+connections:
+  - src: "cluster"
+    dst: "router"
+    src_range:
+      - [0, 3]
+      - [0, 3]
+    dst_range:
+      - [0, 3]
+      - [0, 3]
+    dst_dir: "Eject"
